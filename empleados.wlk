@@ -25,7 +25,11 @@ object galvan {
         if (deuda == 0) {
             dinero += sueldo
         } else {
-            // QUE PASA SI EL SUELDO ES MENOR A LA DEUDA
+            deuda += sueldo
+        }
+        if (deuda > 0) {
+            dinero = deuda
+            deuda = 0
         }
     }
 
