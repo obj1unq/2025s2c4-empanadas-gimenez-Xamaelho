@@ -11,25 +11,26 @@ object gimenez {
 object galvan {
     var dinero = 0
     var deuda = 0
-    var sueldo = 15000
+    var property sueldo = 15000 
+    // se puede hacer con var property para que los metodos getter y setter se llamen igual
 
-    method sueldo() = sueldo
     method deuda() = deuda
     method dinero() = dinero
 
-    method cambiarSueldo(monto) {
+    method sueldo(monto) {
         sueldo = monto
     }
 
     method cobrarSueldo() {
+        var cobro = sueldo
         if (deuda == 0) {
-            dinero += sueldo
+            dinero += cobro
+        } else if (deuda > sueldo){
+            deuda -= sueldo
         } else {
-            deuda += sueldo
-        }
-        if (deuda > 0) {
-            dinero = deuda
+            cobro -= deuda
             deuda = 0
+            dinero += cobro
         }
     }
 
@@ -37,12 +38,10 @@ object galvan {
         var montoResultante = monto
         if (dinero > monto) {
             dinero -= monto
-        } else if (dinero > 0 && dinero < monto) {
+        } else if (dinero < monto) {
             montoResultante = monto - dinero
             dinero = 0
             deuda += montoResultante
-        } else {
-            deuda += monto
         }
     }
 
@@ -61,7 +60,7 @@ object baigorria {
         empanadasVendidas = 0
     }
 
-    method cargarEmpanadas(cantidad) {
+    method vender(cantidad) {
         empanadasVendidas = empanadasVendidas + cantidad
     }
 }

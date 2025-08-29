@@ -1,16 +1,86 @@
 import empleados.*
 
-test "punto1: Planteo inicial" {
-
-  baigorria.cargarEmpanadas(500)
-  galvan.cambiarSueldo(20000)
-  baigorria.cargarEmpanadas(300)
-  assert.equals(12000, baigorria.sueldo())
-  assert.equals(20000, galvan.sueldo())
-  
-  gimenez.pagarEmpleado(baigorria)
-  gimenez.pagarEmpleado(galvan)
-  assert.equals(268000, gimenez.fondoSueldo())
-  
+describe "Galvan" {
+  test "Comprobar el sueldo inicial de Galvan" {
+    assert.equals(15000, galvan.sueldo())
+  }
 }
 
+describe "Baigorria" {
+  test "Comprobar el sueldo de Baigorria segun la cantidad de empanadas" {
+    baigorria.vender(500)
+    assert.equals(500 * 15, baigorria.sueldo())
+  }
+}
+
+describe "Gimenez" {
+  test "Fondo inicial de Gimenez para sueldos de 300000" {
+    assert.equals(300000, gimenez.fondoSueldo())
+  }
+}
+
+describe "Planteo inicial" {
+
+  test "Se puede cambiar el sueldo de Galvan" {
+    galvan.sueldo(20000)
+    assert.equals(20000, galvan.sueldo() )
+  }
+  test "Si vende mas empanadas el sueldo se acumula" {
+    baigorria.vender(500)
+    baigorria.vender(300)
+    assert.equals(800 * 15, baigorria.sueldo())
+  }
+}
+
+describe "Punto 1" {
+  method initialize() {
+    baigorria.vender(500)
+    galvan.sueldo(20000)
+    baigorria.vender(300)
+  }
+
+  test "Pagar sueldos" {
+    gimenez.pagarEmpleado(baigorria)
+    gimenez.pagarEmpleado(galvan)
+    assert.equals(268000, gimenez.fondoSueldo())  
+  }
+}
+
+describe "Punto 2" {
+  method initialize() {
+    baigorria.vender(500)
+    galvan.sueldo(20000)
+    baigorria.vender(300)
+  }
+  test "Gimenez paga dos sueldos a Baigorria y queda almacenados como total cobrado" {
+    gimenez.pagarEmpleado(baigorria)
+    baigorria.vender(800)
+    gimenez.pagarEmpleado(baigorria)
+    assert.equals(24000, baigorria.totalCobrado())
+  }
+}
+
+describe "Punto 3" {
+  test "Galvan inicia con deuda y dinero en 0 y sueldo es 15000" {
+    assert.equals(0, galvan.dinero())
+    assert.equals(0, galvan.deuda())
+    assert.equals(15000, galvan.sueldo())
+  }
+  test "Galvan gasta 4000 y deuda se convierte en 4000 y dinero es 0" {
+    galvan.gastar(4000)
+    assert.equals(0, galvan.dinero())
+    assert.equals(4000, galvan.deuda())
+    galvan.gastar(8000)
+    assert.equals(0, galvan.dinero())
+    assert.equals(12000, galvan.deuda())
+    gimenez.pagarEmpleado(galvan)
+    assert.equals(3000, galvan.dinero())
+    assert.equals(0, galvan.deuda())
+    galvan.gastar(25000)
+    assert.equals(0, galvan.dinero())
+    assert.equals(22000, galvan.deuda())
+    gimenez.pagarEmpleado(galvan)
+    assert.equals(0, galvan.dinero())
+    assert.equals(7000, galvan.deuda())
+  }
+}
